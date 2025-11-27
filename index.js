@@ -38,6 +38,10 @@ app.listen(port, () => {
   console.log("My port is working on: " + port);
 });
 
+// index.js
+// ...
+mongoose.connect(process.env.MONGO_URI) // <--- ESTO ES LO QUE LEE TU VARIABLE
+// ...
 
 //El enrutamiento es separar todas las rutas que estoy trabajando.
 //mongodb+srv://ferchoperezlopez10_db_user:REMOVED_SECRET@proyecto-final.jtiaido.mongodb.net/

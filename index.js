@@ -6,7 +6,7 @@ const port = 3000;
 
 
 app.get("/", (req, res) => {
-  res.send("Hola desde server express");
+  res.send("Hola chavos");
 });
 
 app.get("/nuevaruta", (req, res) => {

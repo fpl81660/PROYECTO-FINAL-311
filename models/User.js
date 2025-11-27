@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const UserSchema = mongoose.Schema({
     id: {
-        type: integer,
+        type: Number,
         required: true
     },
     name:{
@@ -15,11 +15,11 @@ const UserSchema = mongoose.Schema({
         unique: true
     },
     password:{
-        type: string,
+        type: String,
     },
     role:{
         type: String,
     }
 });
 
-module.exports = mongoose.model('User', BookSchema);
+module.exports = mongoose.model('User', UserSchema);

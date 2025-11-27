@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const setupSwagger = require('./swagger');
+
+app.use(express.json());
 
 
-
+setupSwagger(app);
 
 app.get("/", (req, res) => {
   res.send("Hola como estas");

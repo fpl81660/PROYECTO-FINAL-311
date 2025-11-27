@@ -3,6 +3,10 @@ const app = express();
 const port = 3000;
 const setupSwagger = require('./swagger');
 const { logErrors, errorHandler } = require('./middleware/errorHandler');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const Zone = require('./routes/zoneRouter');
+const mongoose = require('mongoose');
 
 app.use(express.json());
 
@@ -28,4 +32,13 @@ app.listen(port, () => {
 });
 
 
+app.use(cors());
+app.use(bodyParser.json());
+app.use('/api/Zone', Zone);
+mongoose.connect(
+    'mongodb+srv://ferchoperezlopez10_db_user:REMOVED_SECRET@proyecto-final.jtiaido.mongodb.net/?retryWrites=true&w=majority&appName=proyecto-final')
+    .then(()=>console.log('Connected to DB'))
+    .catch((err)=>console.log(err))
+
 //El enrutamiento es separar todas las rutas que estoy trabajando.
+//mongodb+srv://ferchoperezlopez10_db_user:REMOVED_SECRET@proyecto-final.jtiaido.mongodb.net/

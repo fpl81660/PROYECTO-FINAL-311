@@ -1,61 +1,65 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User'); 
+const sensorService = require('../services/sensorService'); 
 
-router.get('/', (req, res) => {
-    Zone.find()
-        .then(data => {
-            res.json(data);
+router.get('/', async (req, res) => {
+    try {
+        const sensors = await sensorService.getAll();
+        res.status(200).json(sensors);
+    } catch (error) {
+        res.status(500).json({
+            message: "Error al obtener los sensores",
+            error: error.message
         })
-        .catch(e => {
-            res.json({ message: e })
-        })
+    }
+});
+router.get('/:idSensor', async (req, res) => {
+    try {
+        const { idSensor } = req.params;
+        const sensor = await sensorService.getById(idSensor);
+        if (!sensor) {
+            return res.status(404).json({ message: "Sensor no encontrado" });
+        }
+        res.json(sensor);
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
 });
 
-router.post('/', (req, res) => {
-    const zone = new Zone({
-        name: req.body.name, 
-        description: req.body.description,
-        isActive: req.body.isActive
-    });
-
-    zone.save()
-        .then(data => {
-            res.json(data);
-        }).catch(e => {
-            res.json({ message: e })
-        })
+router.post('/', async (req, res) => {
+    try {
+        const createdSensor = await sensorService.create(req.body);
+        res.status(201).json(createdSensor);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
-router.patch('/:id', (req, res) => {
-    Zone.updateOne({
-        _id: req.params.id
-    },
-        {
-            $set: { 
-                name: req.body.name,
-                description: req.body.description, 
-                isActive: req.body.isActive 
-            }
-        })
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
-        })
+router.patch('/:id', async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const updatedSensor = await sensorService.update(id, req.body); 
+        res.status(200).json(updatedSensor);
+    } catch (error){
+        if(error.message === 'Sensor Not Found'){
+            return res.status(404).json({ message: error.message});
+        }
+
+        res.status(500).json({ message: error.message});
+    }
 });
 
-router.delete('/:id', (req, res) => {
-    Zone.deleteOne({
-        _id: req.params.id
-    })
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
-        });
+router.delete('/:id', async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const result = await sensorService.delete(id);
+        res.json({
+            message: "Sensor deleted", 
+            result
+        }); 
+    } catch (error) {
+        res.status(404).json({ message: error.message}); 
+    }
 });
 
 module.exports = router;

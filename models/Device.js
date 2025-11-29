@@ -17,13 +17,14 @@ const DeviceSchema = mongoose.Schema({
         ref: 'Zone', 
     },
     installedAt:{
-        type: date,
+        type: Date,
     },
     status:{
-        enum: ['active', 'mantenance', 'offline'],
+        type: String,
+        enum: ['active', 'maintenance', 'offline'],
     },
     sensors:{
-        type: mongoose.Schema.Types.ObjectId, 
+        type: [mongoose.Schema.Types.ObjectId], 
         ref: 'Sensor', 
     }
 });

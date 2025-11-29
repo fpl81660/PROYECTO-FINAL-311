@@ -1,61 +1,66 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User'); 
+const readingService = require('../services/readingService'); 
 
-router.get('/', (req, res) => {
-    Zone.find()
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
-        })
-});
-
-router.post('/', (req, res) => {
-    const zone = new Zone({
-        name: req.body.name, 
-        description: req.body.description,
-        isActive: req.body.isActive
-    });
-
-    zone.save()
-        .then(data => {
-            res.json(data);
-        }).catch(e => {
-            res.json({ message: e })
-        })
-});
-
-router.patch('/:id', (req, res) => {
-    Zone.updateOne({
-        _id: req.params.id
-    },
-        {
-            $set: { 
-                name: req.body.name,
-                description: req.body.description, 
-                isActive: req.body.isActive 
-            }
-        })
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
-        })
-});
-
-router.delete('/:id', (req, res) => {
-    Zone.deleteOne({
-        _id: req.params.id
-    })
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
+router.get('/', async (req, res) => {
+    try {
+        const readings = await readingService.getAll();
+        res.status(200).json(readings);
+    } catch (error) {
+        res.status(500).json({
+            message: "Error al obtener las lecturas",
+            error: error.message
         });
+    }
+});
+
+router.get('/:idReading', async (req, res) => {
+    try {
+        const { idReading } = req.params;
+        const reading = await readingService.getById(idReading);
+        if (!reading) {
+            return res.status(404).json({ message: "Lectura no encontrada" });
+        }
+        res.json(reading);
+    } catch (error) {
+        res.status(404).json({ message: error.message }); 
+    }
+});
+
+router.post('/', async (req, res) => {
+    try {
+        const createdReading = await readingService.create(req.body);
+        res.status(201).json(createdReading);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.patch('/:id', async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const updatedReading = await readingService.update(id, req.body); 
+        res.status(200).json(updatedReading);
+    } catch (error){
+        if(error.message === 'Reading Not Found'){
+            return res.status(404).json({ message: error.message});
+        }
+
+        res.status(500).json({ message: error.message});
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const result = await readingService.delete(id);
+        res.json({
+            message: "Reading deleted", 
+            result
+        }); 
+    } catch (error) {
+        res.status(404).json({ message: error.message}); 
+    }
 });
 
 module.exports = router;

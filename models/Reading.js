@@ -6,7 +6,7 @@ const ReadingSchema = mongoose.Schema({
         required: true 
     },
 
-    tipe:{
+    time:{
         type: Date,
     },
     value:{

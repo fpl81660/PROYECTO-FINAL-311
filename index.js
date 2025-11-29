@@ -20,9 +20,6 @@ app.get("/nuevaruta", (req, res) => {
   res.send("Hola este es el segundo endpoint");
 });
 
-app.get('/error', (req, res, next) => {
-  next(new Error('Algo salio mal'))
-});
 
 app.use('/api/Zone', Zone);
 

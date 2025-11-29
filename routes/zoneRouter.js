@@ -47,4 +47,16 @@ router.patch('/:id', (req, res) => {
         })
 });
 
+router.delete('/:id', (req, res) => {
+    Zone.deleteOne({
+        _id: req.params.id
+    })
+        .then(data => {
+            res.json(data);
+        })
+        .catch(e => {
+            res.json({ message: e })
+        });
+});
+
 module.exports = router;

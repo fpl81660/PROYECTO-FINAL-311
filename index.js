@@ -4,8 +4,8 @@ const port = 3000;
 const setupSwagger = require('./swagger');
 const { logErrors, errorHandler } = require('./middleware/errorHandler');
 const cors = require('cors');
-const Zone = require('./routes/zoneRouter');
 const mongoose = require('mongoose');
+const routerApi = require("./routes/rutas");
 
 app.use(express.json());
 app.use(cors());
@@ -21,7 +21,7 @@ app.get("/nuevaruta", (req, res) => {
 });
 
 
-app.use('/api/Zone', Zone);
+routerApi(app);
 
 app.use(logErrors);
 app.use(errorHandler);

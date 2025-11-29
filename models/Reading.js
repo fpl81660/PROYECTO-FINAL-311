@@ -1,15 +1,18 @@
 const mongoose = require('mongoose');
-const SensorSchema = mongoose.Schema({
+const ReadingSchema = mongoose.Schema({
     sensorId:{
-        type: mongoose.Schema.Types.ObjectId, // Referencia a otro documento
-        ref: 'Sensor', // ¡Esto enlaza con el modelo 'Sensor'!
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Sensor', 
         required: true 
     },
 
     tipe:{
-        type: date,
+        type: Date,
     },
     value:{
-        type: number,
+        type: Number,
     },
 });
+
+
+module.exports = mongoose.model('Reading', ReadingSchema);

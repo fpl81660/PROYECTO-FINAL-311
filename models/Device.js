@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const SensorSchema = mongoose.Schema({
+const DeviceSchema = mongoose.Schema({
     serialNumber:{
         type: String,
         required: true,
@@ -11,12 +11,10 @@ const SensorSchema = mongoose.Schema({
     ownerId:{
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 
-        required: true 
     },
     zoneId:{
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Zone', 
-        required: true 
     },
     installedAt:{
         type: date,
@@ -24,4 +22,10 @@ const SensorSchema = mongoose.Schema({
     status:{
         enum: ['active', 'mantenance', 'offline'],
     },
+    sensors:{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Sensor', 
+    }
 });
+
+module.exports = mongoose.model('Device', DeviceSchema);

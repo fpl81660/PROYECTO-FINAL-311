@@ -17,3 +17,5 @@ const SensorSchema = mongoose.Schema({
         type: Boolean,
     }
 });
+
+module.exports = mongoose.model('Sensor', SensorSchema);

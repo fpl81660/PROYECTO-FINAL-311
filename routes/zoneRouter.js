@@ -36,35 +36,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.patch('/:id', (req, res) => {
-    Zone.updateOne({
-        _id: req.params.id
-    },
-        {
-            $set: {
-                name: req.body.name,
-                description: req.body.description,
-                isActive: req.body.isActive
-            }
-        })
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
-        })
+router.patch('/:id', async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const updatedZone = await zoneService.update(id, req.body); 
+        res.status(200).json(updatedZone);
+    } catch (error){
+        if(error.message === 'Zone Not Found'){
+            return res.status(404).json({ message: error.message});
+        }
+
+        res.status(500).json({ message: error.message});
+    }
 });
 
-router.delete('/:id', (req, res) => {
-    Zone.deleteOne({
-        _id: req.params.id
-    })
-        .then(data => {
-            res.json(data);
-        })
-        .catch(e => {
-            res.json({ message: e })
-        });
+router.delete('/:id', async (req, res) => {
+    try {
+        const {id} = req.params; 
+        const result = await zoneService.delete(id);
+        res.json({
+            message: "Zone deleted", 
+            result
+        }); 
+    } catch (error) {
+        res.status(404).json({ message: error.message}); 
+    }
 });
 
 module.exports = router;

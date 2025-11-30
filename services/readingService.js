@@ -22,7 +22,10 @@ class readingService{
 
     async create(data){
         const newReading = new Reading(data); 
-        const usedSensor = await Sensor.findById(data.sensorId);
+        const usedSensor = await Sensor.findById(data.sensorId); 
+        if(usedSensor.isActive === false){
+            throw new Error('Sensor is inactive and cannot be used');
+        } 
         if(!usedSensor){
             throw new Error('Sensor Not Found'); 
         }
@@ -30,19 +33,28 @@ class readingService{
     }; 
 
     async update(id, data){
-        const ReadingUpdated = await Reading.findByIdAndUpdate(id, data, {new: true});
+        const ReadingUpdated = await Reading.findById(id);
         if(!ReadingUpdated){
             throw new Error('Reading Not Found');
         }
-        return ReadingUpdated; 
+        if(data.sensorId){
+            throw new Error('Sensor ID cannot be changed');
+        } 
+
+        ReadingUpdated.set(data); 
+
+        return await ReadingUpdated.save();
     };
     
     async delete(id){
-        const ReadingDeleted = await Reading.findByIdAndDelete(id);
-        if(!ReadingDeleted){
+        const readingToDelete = await Reading.findById(id);
+        if (!readingToDelete) {
             throw new Error('Reading Not Found');
         }
-        return ReadingDeleted; 
+        
+        await readingToDelete.deleteOne();
+
+        return readingToDelete; 
     };
 
 }

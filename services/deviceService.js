@@ -32,6 +32,9 @@ class deviceService {
         if (!zone) {
             throw new Error('Zone Not Found');
         }
+        if (zone.isActive === false) {
+            throw new Error('Zone is inactive and cannot be used');
+        }
 
         const sensorIds = data.sensors || [];
 
@@ -40,7 +43,7 @@ class deviceService {
                 _id: { $in: sensorIds }
             });
 
-            if (foundSensors.length !== sensorIds.length) {
+            if (foundSensors.length !== sensorIds.length || foundSensors.isActive.includes(false)) {
                 throw new Error('One or more Sensor IDs are invalid or not found.');
             }
         }

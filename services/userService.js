@@ -1,44 +1,53 @@
 const User = require('../models/User');
+const Device = require('../models/Device');
 
 class userService {
 
     async getAll() {
         try {
             const Users = await User.find();
-            return Users; 
+            return Users;
         } catch (error) {
             throw error;
         }
     }
 
-    async getById(id){
+    async getById(id) {
         const Users = await User.findById(id);
-        if (!Users){
-            throw new Error('User Not Found'); 
-        }
-
-        return Users; 
-    };
-
-    async create(data){
-        const newUser = new User(data); 
-        return await newUser.save(); 
-    }; 
-
-    async update(id, data){
-        const UserUpdated = await User.findByIdAndUpdate(id, data, {new: true});
-        if(!UserUpdated){
+        if (!Users) {
             throw new Error('User Not Found');
         }
-        return UserUpdated; 
+
+        return Users;
     };
-    
-    async delete(id){
-        const UserDeleted = await User.findByIdAndDelete(id);
-        if(!UserDeleted){
+
+    async create(data) {
+        const newUser = new User(data);
+        return await newUser.save();
+    };
+
+    async update(id, data) {
+        const UserUpdated = await User.findByIdAndUpdate(id, data, { new: true });
+        if (!UserUpdated) {
             throw new Error('User Not Found');
         }
-        return UserDeleted; 
+        return UserUpdated;
+    };
+
+    async delete(id) {
+        const userToDelete = await User.findById(id);
+        if (!userToDelete) {
+            throw new Error('User Not Found');
+        }
+
+        const userInDevice = await Device.findOne({ ownerId: id });
+        if (userInDevice) {
+            throw new Error('User has associated Devices and cannot be deleted');
+        }
+
+        await userToDelete.deleteOne();
+
+        return userToDelete;
     };
 
 }

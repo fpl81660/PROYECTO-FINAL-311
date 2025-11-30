@@ -1,44 +1,61 @@
 const Zone = require('../models/Zone');
+const Device = require('../models/Device');
 
 class zoneService {
 
     async getAll() {
         try {
             const zones = await Zone.find();
-            return zones; 
+            return zones;
         } catch (error) {
             throw error;
         }
     }
 
-    async getById(id){
+    async getById(id) {
         const zone = await Zone.findById(id);
-        if (!zone){
-            throw new Error('Zone Not Found'); 
-        }
-
-        return zone; 
-    };
-
-    async create(data){
-        const newZone = new Zone(data); 
-        return await newZone.save(); 
-    }; 
-
-    async update(id, data){
-        const zoneUpdated = await Zone.findByIdAndUpdate(id, data, {new: true});
-        if(!zoneUpdated){
+        if (!zone) {
             throw new Error('Zone Not Found');
         }
-        return zoneUpdated; 
+
+        return zone;
     };
-    
-    async delete(id){
-        const zoneDeleted = await Zone.findByIdAndDelete(id);
-        if(!zoneDeleted){
+
+    async create(data) {
+        const newZone = new Zone(data);
+        return await newZone.save();
+    };
+
+    async update(id, data) {
+        const zoneToUpdate = await Zone.findById(id);
+        if (!zoneToUpdate) {
             throw new Error('Zone Not Found');
         }
-        return zoneDeleted; 
+
+        if (data.isActive === false) {
+            const ZoneInDevice = await Device.findOne({ zoneId: id });
+            if (ZoneInDevice) {
+                throw new Error('Zone has associated Devices and cannot be set as false');
+            }
+        }
+
+        zoneToUpdate.set(data);
+        return await zoneToUpdate.save();
+    };
+
+    async delete(id) {
+        const zoneDeleted = await Zone.findById(id);
+        if (!zoneDeleted) {
+            throw new Error('Zone Not Found');
+        }
+        const ZoneInDevice = await Device.findOne({ zoneId: id });
+        if (ZoneInDevice) {
+            throw new Error('Zone has associated Devices and cannot be deleted');
+        }
+        
+       await zoneDeleted.deleteOne();
+
+        return zoneDeleted;
     };
 
 }

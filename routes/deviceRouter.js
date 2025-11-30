@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
         res.status(200).json(device);
     } catch (error) {
         res.status(500).json({
-            message: "Error al obtener las device",
+            message: "Error al obtener los device",
             error: error.message
         });
     }
@@ -19,7 +19,7 @@ router.get('/:idDevice', async (req, res) => {
         const { idDevice } = req.params;
         const device = await deviceService.getById(idDevice);
         if (!device) {
-            return res.status(404).json({ message: "device no encontrada" });
+            return res.status(404).json({ message: "Device no encontrado" });
         }
         res.json(device);
     } catch (error) {

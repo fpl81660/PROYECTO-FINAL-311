@@ -9,7 +9,25 @@ require('dotenv').config();
 const routerApi = require("./routes/rutas");
 
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://proyecto-final-311.onrender.com'
+];
+
+const options = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true 
+};
+app.use(cors(options));
 
 setupSwagger(app);
 

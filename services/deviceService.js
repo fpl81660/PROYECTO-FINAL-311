@@ -43,7 +43,7 @@ class deviceService {
                 _id: { $in: sensorIds }
             });
 
-            if (foundSensors.length !== sensorIds.length || foundSensors.isActive.includes(false)) {
+            if (foundSensors.length !== sensorIds.length || foundSensors.some(sensor => sensor.isActive === false)) {
                 throw new Error('One or more Sensor IDs are invalid or not found.');
             }
         }
@@ -54,7 +54,7 @@ class deviceService {
     };
 
     async update(id, data) {
-        const DeviceUpdated = await Device.findByIdAndUpdate(id, data, { new: true });
+        const DeviceUpdated = await Device.findById(id);
         if (!DeviceUpdated) {
             throw new Error('Device Not Found');
         }
@@ -64,7 +64,27 @@ class deviceService {
         if (!ownerId || !zoneId || !sensors) {
             throw new Error('User, Zone or Sensor Not Found')
         }
-        return await DeviceUpdated;
+
+        if (zoneId.isActive === false) {
+            throw new Error('Zone is inactive and cannot be used');
+        }
+
+        const sensorIds = data.sensors || [];
+
+
+        if (sensorIds.length > 0) {
+            const foundSensors = await Sensor.find({
+                _id: { $in: sensorIds }
+            });
+
+            if (foundSensors.length !== sensorIds.length || foundSensors.some(sensor => sensor.isActive === false)) {
+                throw new Error('One or more Sensor IDs are invalid or not found.');
+            }
+        }
+        
+        DeviceUpdated.set(data); 
+
+        return await DeviceUpdated.save();
     };
 
     async delete(id) {

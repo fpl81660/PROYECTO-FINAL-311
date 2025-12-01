@@ -21,8 +21,9 @@ class zoneService {
         return zone;
     };
 
-    async create(data) {
-        const newZone = new Zone(data);
+   async create(data) {
+        const { name, description, isActive } = data; 
+        const newZone = new Zone({ name, description, isActive });
         return await newZone.save();
     };
 

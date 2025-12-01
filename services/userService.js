@@ -21,13 +21,14 @@ class userService {
         return Users;
     };
 
-    async create(data) {
-        const newUser = new User(data);
+async create(data) {
+        const { name, email, password, role } = data; 
+        const newUser = new User({ name, email, password, role });
         return await newUser.save();
     };
 
     async update(id, data) {
-        const UserUpdated = await User.findByIdAndUpdate(id, data, { new: true });
+        const UserUpdated = await User.findByIdAndUpdate(id, data, { new: true, runValidators: true });
         if (!UserUpdated) {
             throw new Error('User Not Found');
         }

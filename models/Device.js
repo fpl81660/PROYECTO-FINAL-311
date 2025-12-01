@@ -17,7 +17,8 @@ const DeviceSchema = mongoose.Schema({
         ref: 'Zone', 
     },
     installedAt:{
-        type: Date,
+        type: Date, // Tipo de dato: Date
+        default: Date.now // Valor por defecto: La función Date.now
     },
     status:{
         type: String,

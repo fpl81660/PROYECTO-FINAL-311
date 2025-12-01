@@ -20,15 +20,20 @@ class readingService{
         return reading; 
     };
 
+
     async create(data){
-        const newReading = new Reading(data); 
-        const usedSensor = await Sensor.findById(data.sensorId); 
+        const { sensorId, time, value } = data; 
+
+        const usedSensor = await Sensor.findById(sensorId); 
+        
+        if(!usedSensor){
+            throw new Error('Sensor Not Found'); 
+        } 
         if(usedSensor.isActive === false){
             throw new Error('Sensor is inactive and cannot be used');
         } 
-        if(!usedSensor){
-            throw new Error('Sensor Not Found'); 
-        }
+        
+        const newReading = new Reading({ sensorId, time, value }); 
         return await newReading.save(); 
     }; 
 

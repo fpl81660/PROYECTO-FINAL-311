@@ -2,25 +2,69 @@
  * @swagger
  * components:
  *   schemas:
+ *     Device:
+ *       type: object
+ *       properties:
+ *         serialNumber:
+ *           type: string
+ *           description: Número de serie único del dispositivo
+ *         model:
+ *           type: string
+ *           description: Modelo del dispositivo (ej. Gateway-001)
+ *         ownerId:
+ *           type: string
+ *           description: ID del usuario dueño del dispositivo
+ *         zoneId:
+ *           type: string
+ *           description: ID de la zona donde está instalado
+ *         installedAt:
+ *           type: string
+ *           format: date
+ *           description: Fecha de instalación
+ *         status:
+ *           type: string
+ *           enum: [active, maintenance, offline]
+ *           description: Estado actual del dispositivo
+ *         sensors:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Lista de IDs de los sensores asociados
+ *       required:
+ *         - serialNumber
+ *         - model
+ *       example:
+ *         serialNumber: "DVC-A9001"
+ *         model: "GW-PRO-V1"
+ *         ownerId: "674b3cc97e52f0707b615a10"
+ *         zoneId: "674b3cc97e52f0707b615a15"
+ *         installedAt: "2024-01-15"
+ *         status: "active"
+ *         sensors: ["674b3cc97e52f0707b615a20", "674b3cc97e52f0707b615a21"]
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
  *     Zone:
  *       type: object
  *       properties:
- *         _id:
+ *         id:
  *           type: string
  *           description: ID generado por MongoDB
  *         name:
  *           type: string
- *           description: Nombre de la zona
+ *           description: Nombre de la zona (ej. "Cuarto Frío 1")
  *         description:
  *           type: string
- *           description: Descripción de la zona
+ *           description: Descripción detallada de la zona
  *         isActive:
  *           type: boolean
  *           description: Indica si la zona está activa o no
  *       required:
  *         - name
  *       example:
- *         _id: "654a3f932be12f45c2d3478a"
  *         name: "Zona Norte"
  *         description: "Zona destinada a envíos nacionales"
  *         isActive: true
@@ -32,34 +76,34 @@
  *   schemas:
  *     User:
  *       type: object
- *       required:
- *         - name
- *         - email
  *       properties:
  *         id:
  *           type: string
- *           description: ID del usuario
+ *           description: ID generado por MongoDB
  *         name:
  *           type: string
- *           description: Nombre del usuario
+ *           description: Nombre completo del usuario
  *         email:
  *           type: string
- *           description: Correo electrónico único
+ *           description: Correo electrónico único del usuario
  *         password:
  *           type: string
  *           description: Contraseña del usuario (hashed)
  *         role:
  *           type: string
  *           enum: [admin, technician, viewer]
- *           description: Rol del usuario
+ *           description: Rol o nivel de acceso del usuario
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *         - role
  *       example:
- *         id: "674bbcd31f404d9221a415e2"
  *         name: "Juan Pérez"
  *         email: "juan@example.com"
  *         password: "$2a$10$123456abcd"
  *         role: "admin"
  */
-
 
 /**
  * @swagger
@@ -70,28 +114,31 @@
  *       properties:
  *         id:
  *           type: string
- *           description: ID del sensor
+ *           description: ID generado por MongoDB
  *         type:
  *           type: string
- *           description: Tipo de sensor (ej temperatura, humedad, gas)
+ *           description: Tipo de sensor (ej. "Temperatura", "Humedad")
  *         unit:
  *           type: string
- *           description: Unidad de medida del sensor (ej °C, %, ppm)
- *         model:   
+ *           description: Unidad de medida del sensor (ej. "°C", "%", "ppm")
+ *         model:
  *           type: string
- *           description: Modelo del sensor
+ *           description: Modelo del sensor (ej. "DHT22")
  *         location:
  *           type: string
- *           description: Ubicación física del sensor
+ *           description: Ubicación física dentro de una zona
  *         isActive:
  *           type: boolean
  *           description: Indica si el sensor está activo
+ *       required:
+ *         - type
+ *         - unit
  *       example:
- *         id: "674bc3291f404d9b21a41a09"
  *         type: "Temperatura"
  *         unit: "°C"
  *         model: "DHT22"
  *         location: "Cuarto de servidores"
+ *         deviceId: "DVC-A9001"
  *         isActive: true
  */
 
@@ -102,47 +149,26 @@
  *     Reading:
  *       type: object
  *       properties:
- *         _id:
+ *         id:
  *           type: string
- *           example: "674b3cc97e52f0707b615a33"
+ *           description: ID generado por MongoDB
  *         sensorId:
  *           type: string
- *           description: ID del sensor asociado
- *           example: "674b3cc97e52f0707b615a20"
+ *           description: ID del sensor que generó la lectura
  *         time:
  *           type: string
  *           format: date-time
- *           example: "2025-01-01T12:00:00Z"
+ *           description: Marca de tiempo de la lectura
  *         value:
  *           type: number
- *           example: 23.5
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Device:
- *       type: object
- *       properties:
- *         serialNumber:
- *           type: string
- *         model:
- *           type: string
- *         ownerId:
- *           type: string
- *           description: ID del usuario dueño del dispositivo
- *         zoneId:
- *           type: string
- *           description: ID de la zona donde está instalado
- *         installedAt:
- *           type: string
- *           format: date
- *         status:
- *           type: string
- *           enum: [active, maintenance, offline]
- *         sensors:
- *           type: array
- *           items:
- *             type: string
+ *           format: float
+ *           description: Valor medido por el sensor
+ *       required:
+ *         - sensorId
+ *         - time
+ *         - value
+ *       example:
+ *         sensorId: "674b3cc97e52f0707b615a20"
+ *         time: "2025-01-01T12:00:00Z"
+ *         value: 23.5
  */

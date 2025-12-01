@@ -21,8 +21,10 @@ class sensorService {
         return sensor;
     };
 
+
     async create(data) {
-        const newSensor = new Sensor(data);
+        const { type, unit, model, location, isActive } = data; 
+        const newSensor = new Sensor({ type, unit, model, location, isActive });
         return await newSensor.save();
     };
 

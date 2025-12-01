@@ -23,8 +23,10 @@ class deviceService {
     };
 
     async create(data) {
-        const owner = await User.findById(data.ownerId);
-        const zone = await Zone.findById(data.zoneId);
+        const { serialNumber, model, ownerId, zoneId, installedAt, status, sensors } = data;
+
+        const owner = await User.findById(ownerId);
+        const zone = await Zone.findById(zoneId);
 
         if (!owner) {
             throw new Error('Owner (User) Not Found');
@@ -36,7 +38,7 @@ class deviceService {
             throw new Error('Zone is inactive and cannot be used');
         }
 
-        const sensorIds = data.sensors || [];
+        const sensorIds = sensors || [];
 
         if (sensorIds.length > 0) {
             const foundSensors = await Sensor.find({
@@ -48,8 +50,7 @@ class deviceService {
             }
         }
 
-
-        const newDevice = new Device(data);
+        const newDevice = new Device({ serialNumber, model, ownerId, zoneId, installedAt, status, sensors });
         return await newDevice.save();
     };
 

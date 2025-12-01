@@ -2,6 +2,26 @@ const express = require('express');
 const router = express.Router();
 const readingService = require('../services/readingService'); 
 
+/**
+ * @swagger
+ * /api/Reading:
+ *   get:
+ *     summary: Obtener todas las lecturas
+ *     tags:
+ *       - Reading
+ *     responses:
+ *       200:
+ *         description: Lista de lecturas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Reading'
+ *       500:
+ *         description: Error al obtener lecturas
+ */
+
 router.get('/', async (req, res) => {
     try {
         const readings = await readingService.getAll();
@@ -13,6 +33,30 @@ router.get('/', async (req, res) => {
         });
     }
 });
+
+/**
+ * @swagger
+ * /api/Reading/{idReading}:
+ *   get:
+ *     summary: Obtener lectura por ID
+ *     tags:
+ *       - Reading
+ *     parameters:
+ *       - in: path
+ *         name: idReading
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lectura encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Reading'
+ *       404:
+ *         description: Lectura no encontrada
+ */
 
 router.get('/:idReading', async (req, res) => {
     try {
@@ -27,6 +71,29 @@ router.get('/:idReading', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/Reading:
+ *   post:
+ *     summary: Crear una nueva lectura
+ *     tags:
+ *       - Reading
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Reading'
+ *     responses:
+ *       201:
+ *         description: Lectura creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Reading'
+ *       500:
+ *         description: Error al crear lectura
+ */
 router.post('/', async (req, res) => {
     try {
         const createdReading = await readingService.create(req.body);
@@ -36,6 +103,33 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/Reading/{id}:
+ *   patch:
+ *     summary: Actualizar una lectura
+ *     tags:
+ *       - Reading
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Reading'
+ *     responses:
+ *       200:
+ *         description: Lectura actualizada
+ *       404:
+ *         description: Lectura no encontrada
+ *       500:
+ *         description: Error del servidor
+ */
 router.patch('/:id', async (req, res) => {
     try {
         const {id} = req.params; 
@@ -50,6 +144,25 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/Reading/{id}:
+ *   delete:
+ *     summary: Eliminar una lectura
+ *     tags:
+ *       - Reading
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lectura eliminada
+ *       404:
+ *         description: Lectura no encontrada
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const {id} = req.params; 

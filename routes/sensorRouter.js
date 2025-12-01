@@ -2,6 +2,26 @@ const express = require('express');
 const router = express.Router();
 const sensorService = require('../services/sensorService'); 
 
+
+/**
+ * @swagger
+ * /api/Sensor:
+ *   get:
+ *     summary: Obtiene todos los sensores
+ *     tags: [Sensor]
+ *     responses:
+ *       200:
+ *         description: Lista de sensores
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Sensor'
+ *       500:
+ *         description: Error al obtener los sensores
+ */
+
 router.get('/', async (req, res) => {
     try {
         const sensors = await sensorService.getAll();
@@ -13,6 +33,30 @@ router.get('/', async (req, res) => {
         })
     }
 });
+
+/**
+ * @swagger
+ * /api/Sensor/{idSensor}:
+ *   get:
+ *     summary: Obtiene un sensor por su ID
+ *     tags: [Sensor]
+ *     parameters:
+ *       - in: path
+ *         name: idSensor
+ *         required: true
+ *         description: ID del sensor
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Sensor encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sensor'
+ *       404:
+ *         description: Sensor no encontrado
+ */
 router.get('/:idSensor', async (req, res) => {
     try {
         const { idSensor } = req.params;
@@ -26,6 +70,25 @@ router.get('/:idSensor', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/Sensor:
+ *   post:
+ *     summary: Crea un nuevo sensor
+ *     tags: [Sensor]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sensor'
+ *     responses:
+ *       201:
+ *         description: Sensor creado exitosamente
+ *       500:
+ *         description: Error al crear el sensor
+ */
+
 router.post('/', async (req, res) => {
     try {
         const createdSensor = await sensorService.create(req.body);
@@ -35,6 +98,33 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/Sensor/{id}:
+ *   patch:
+ *     summary: Actualiza un sensor por su ID
+ *     tags: [Sensor]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del sensor
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sensor'
+ *     responses:
+ *       200:
+ *         description: Sensor actualizado exitosamente
+ *       404:
+ *         description: Sensor no encontrado
+ *       500:
+ *         description: Error al actualizar el sensor
+ */
 router.patch('/:id', async (req, res) => {
     try {
         const {id} = req.params; 
@@ -48,6 +138,26 @@ router.patch('/:id', async (req, res) => {
         res.status(500).json({ message: error.message});
     }
 });
+
+/**
+ * @swagger
+ * /api/Sensor/{id}:
+ *   delete:
+ *     summary: Elimina un sensor por su ID
+ *     tags: [Sensor]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del sensor
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Sensor eliminado correctamente
+ *       404:
+ *         description: Sensor no encontrado
+ */
 
 router.delete('/:id', async (req, res) => {
     try {

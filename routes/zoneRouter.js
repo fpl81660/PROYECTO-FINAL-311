@@ -2,6 +2,22 @@ const express = require('express');
 const router = express.Router();
 const zoneService = require('../services/zoneService');
 
+/**
+ * @swagger
+ * /api/zone:
+ *   get:
+ *     summary: Obtiene todas las zonas
+ *     tags: [Zone]
+ *     responses:
+ *       200:
+ *         description: Lista de zonas obtenida correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Zone'
+ */
 router.get('/', async (req, res) => {
     try {
         const zones = await zoneService.getAll();
@@ -13,6 +29,30 @@ router.get('/', async (req, res) => {
         });
     }
 });
+
+
+/**
+ * @swagger
+ * /api/zone/{idZone}:
+ *   get:
+ *     summary: Obtiene una zona por ID
+ *     tags: [Zone]
+ *     parameters:
+ *       - in: path
+ *         name: idZone
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Zona encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Zone'
+ *       404:
+ *         description: Zona no encontrada
+ */
 
 router.get('/:idZone', async (req, res) => {
     try {
@@ -27,6 +67,27 @@ router.get('/:idZone', async (req, res) => {
     }
 });
 
+
+/**
+ * @swagger
+ * /api/zone:
+ *   post:
+ *     summary: Crea una nueva zona
+ *     tags: [Zone]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Zone'
+ *     responses:
+ *       201:
+ *         description: Zona creada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Zone'
+ */
 router.post('/', async (req, res) => {
     try {
         const createdZone = await zoneService.create(req.body);
@@ -36,6 +97,34 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/zone/{id}:
+ *   patch:
+ *     summary: Actualiza una zona por ID
+ *     tags: [Zone]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Zone'
+ *     responses:
+ *       200:
+ *         description: Zona actualizada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Zone'
+ *       404:
+ *         description: Zona no encontrada
+ */
 router.patch('/:id', async (req, res) => {
     try {
         const {id} = req.params; 
@@ -50,6 +139,24 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/zone/{id}:
+ *   delete:
+ *     summary: Elimina una zona por ID
+ *     tags: [Zone]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Zona eliminada correctamente
+ *       404:
+ *         description: Zona no encontrada
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const {id} = req.params; 

@@ -2,6 +2,25 @@ const express = require('express');
 const router = express.Router();
 const userService = require('../services/userService');
 
+/**
+ * @swagger
+ * /api/User:
+ *   get:
+ *     summary: Obtiene todos los usuarios
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Error al obtener los usuarios
+ */
+
 router.get('/', async (req, res) => {
     try {
         const User = await userService.getAll();
@@ -13,6 +32,30 @@ router.get('/', async (req, res) => {
         });
     }
 });
+
+/**
+ * @swagger
+ * /api/User/{idUser}:
+ *   get:
+ *     summary: Obtiene un usuario por su ID
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: idUser
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Usuario no encontrado
+ */
 
 router.get('/:idUser', async (req, res) => {
     try {
@@ -27,6 +70,25 @@ router.get('/:idUser', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/User:
+ *   post:
+ *     summary: Crea un nuevo usuario
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: Usuario creado exitosamente
+ *       500:
+ *         description: Error al crear el usuario
+ */
+
 router.post('/', async (req, res) => {
     try {
         const createdUser = await userService.create(req.body);
@@ -35,6 +97,35 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+
+/**
+ * @swagger
+ * /api/User/{id}:
+ *   patch:
+ *     summary: Actualiza un usuario por su ID
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error al actualizar usuario
+ */
 
 router.patch('/:id', async (req, res) => {
     try {
@@ -49,6 +140,26 @@ router.patch('/:id', async (req, res) => {
         res.status(500).json({ message: error.message});
     }
 });
+
+/**
+ * @swagger
+ * /api/User/{id}:
+ *   delete:
+ *     summary: Elimina un usuario por su ID
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado correctamente
+ *       404:
+ *         description: Usuario no encontrado
+ */
 
 router.delete('/:id', async (req, res) => {
     try {

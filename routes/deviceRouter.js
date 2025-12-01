@@ -1,6 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const deviceService = require('../services/deviceService'); 
+const deviceService = require('../services/deviceService');
+
+
+/**
+ * @swagger
+ * /api/Device:
+ *   get:
+ *     summary: Obtiene todos los dispositivos
+ *     tags:
+ *       - Device
+ *     responses:
+ *       200:
+ *         description: Lista de dispositivos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Device'
+ *       500:
+ *         description: Error del servidor
+ */
 
 router.get('/', async (req, res) => {
     try {
@@ -14,6 +35,32 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+/**
+ * @swagger
+ * /api/Device/{idDevice}:
+ *   get:
+ *     summary: Obtiene un dispositivo por ID
+ *     tags:
+ *       - Device
+ *     parameters:
+ *       - in: path
+ *         name: idDevice
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del dispositivo
+ *     responses:
+ *       200:
+ *         description: Dispositivo encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Device'
+ *       404:
+ *         description: Dispositivo no encontrado
+ */
+
 router.get('/:idDevice', async (req, res) => {
     try {
         const { idDevice } = req.params;
@@ -23,9 +70,30 @@ router.get('/:idDevice', async (req, res) => {
         }
         res.json(device);
     } catch (error) {
-        res.status(404).json({ message: error.message }); 
+        res.status(404).json({ message: error.message });
     }
 });
+
+
+/**
+ * @swagger
+ * /api/Device:
+ *   post:
+ *     summary: Crea un nuevo dispositivo
+ *     tags:
+ *       - Device
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Device'
+ *     responses:
+ *       201:
+ *         description: Dispositivo creado
+ *       500:
+ *         description: Error del servidor
+ */
 
 router.post('/', async (req, res) => {
     try {
@@ -36,30 +104,80 @@ router.post('/', async (req, res) => {
     }
 });
 
+
+
+/**
+ * @swagger
+ * /api/Device/{id}:
+ *   patch:
+ *     summary: Actualiza un dispositivo por ID
+ *     tags:
+ *       - Device
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Device'
+ *     responses:
+ *       200:
+ *         description: Dispositivo actualizado
+ *       404:
+ *         description: Dispositivo no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
+
 router.patch('/:id', async (req, res) => {
     try {
-        const {id} = req.params; 
-        const updatedDevice = await deviceService.update(id, req.body); 
+        const { id } = req.params;
+        const updatedDevice = await deviceService.update(id, req.body);
         res.status(200).json(updatedDevice);
-    } catch (error){
-        if(error.message === 'Device Not Found'){
-            return res.status(404).json({ message: error.message});
+    } catch (error) {
+        if (error.message === 'Device Not Found') {
+            return res.status(404).json({ message: error.message });
         }
 
-        res.status(500).json({ message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 
+/**
+ * @swagger
+ * /api/Device/{id}:
+ *   delete:
+ *     summary: Elimina un dispositivo por ID
+ *     tags:
+ *       - Device
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Dispositivo eliminado
+ *       404:
+ *         description: Dispositivo no encontrado
+ */
+    
 router.delete('/:id', async (req, res) => {
     try {
-        const {id} = req.params; 
+        const { id } = req.params;
         const result = await deviceService.delete(id);
         res.json({
-            message: "Device deleted", 
+            message: "Device deleted",
             result
-        }); 
+        });
     } catch (error) {
-        res.status(404).json({ message: error.message}); 
+        res.status(404).json({ message: error.message });
     }
 });
 

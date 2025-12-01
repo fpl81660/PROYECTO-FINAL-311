@@ -7,7 +7,7 @@ const DeviceSchema = mongoose.Schema({
     },
     model:{
         type: String,
-    },
+    },  
     ownerId:{
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 

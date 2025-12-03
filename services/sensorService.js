@@ -23,7 +23,7 @@ class sensorService {
 
 
     async create(data) {
-        const { type, unit, model, location, isActive } = data; 
+        const { type, unit, model, location, isActive } = data;
         const newSensor = new Sensor({ type, unit, model, location, isActive });
         return await newSensor.save();
     };
@@ -42,7 +42,12 @@ class sensorService {
             }
         }
 
-        sensorToUpdate.set(data);
+        Object.keys(data).forEach((key) => {
+            if (data[key] !== null && data[key] !== undefined) {
+                sensorToUpdate[key] = data[key];
+            }
+        });
+
         return await sensorToUpdate.save();
     };
 

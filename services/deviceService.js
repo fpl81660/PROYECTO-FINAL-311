@@ -23,7 +23,7 @@ class deviceService {
     };
 
     async create(data) {
-        const { serialNumber, model, ownerId, zoneId, status, sensors } = data;
+        const { serialNumber, model, ownerId, zoneId, sensors } = data;
 
         const owner = await User.findById(ownerId);
         const zone = await Zone.findById(zoneId);
@@ -50,7 +50,7 @@ class deviceService {
             }
         }
 
-        const newDevice = new Device({ serialNumber, model, ownerId, zoneId, status, sensors });
+        const newDevice = new Device({ serialNumber, model, ownerId, zoneId, sensors });
         return await newDevice.save();
     };
 
@@ -77,7 +77,9 @@ class deviceService {
                 throw new Error('Zone is inactive and cannot be used');
             }
         }
-
+if (data.installedAt) {
+            throw new Error('Installed Date cannot be changed');
+        }
         
         if (data.sensors && data.sensors.length > 0) {
             const foundSensors = await Sensor.find({

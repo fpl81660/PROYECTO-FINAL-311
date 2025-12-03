@@ -26,13 +26,13 @@ class zoneService {
         const newZone = new Zone({ name, description, isActive });
         return await newZone.save();
     };
-
-    async update(id, data) {
+async update(id, data) {
         const zoneToUpdate = await Zone.findById(id);
         if (!zoneToUpdate) {
             throw new Error('Zone Not Found');
         }
 
+        // Lógica específica de Zone: No permitir desactivar si tiene dependencias
         if (data.isActive === false) {
             const ZoneInDevice = await Device.findOne({ zoneId: id });
             if (ZoneInDevice) {
@@ -40,7 +40,12 @@ class zoneService {
             }
         }
 
-        zoneToUpdate.set(data);
+        Object.keys(data).forEach((key) => {
+            if (data[key] !== null && data[key] !== undefined) {
+                zoneToUpdate[key] = data[key];
+            }
+        });
+
         return await zoneToUpdate.save();
     };
 

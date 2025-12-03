@@ -21,18 +21,26 @@ class userService {
         return Users;
     };
 
-async create(data) {
-        const { name, email, password, role } = data; 
+    async create(data) {
+        const { name, email, password, role } = data;
         const newUser = new User({ name, email, password, role });
         return await newUser.save();
     };
 
+
     async update(id, data) {
-        const UserUpdated = await User.findByIdAndUpdate(id, data, { new: true, runValidators: true });
-        if (!UserUpdated) {
+        const userToUpdate = await User.findById(id);
+        if (!userToUpdate) {
             throw new Error('User Not Found');
         }
-        return UserUpdated;
+
+        Object.keys(data).forEach((key) => {
+            if (data[key] !== null && data[key] !== undefined) {
+                userToUpdate[key] = data[key];
+            }
+        });
+
+        return await userToUpdate.save();
     };
 
     async delete(id) {

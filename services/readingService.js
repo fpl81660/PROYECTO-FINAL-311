@@ -46,6 +46,9 @@ class readingService {
         if (data.sensorId) {
             throw new Error('Sensor ID cannot be changed');
         }
+        if (data.time) {
+            throw new Error('Timestamp cannot be changed');
+        }
 
         Object.keys(data).forEach((key) => {
             if (data[key] !== null && data[key] !== undefined) {

@@ -1,7 +1,12 @@
 const Sensor = require('../models/Sensor');
 const Reading = require('../models/Reading');
 const Device = require('../models/Device');
-
+const SENSOR_CONFIG = {
+    'Temperature': '°C',
+    'Humidity': '%',
+    'Co2': 'ppm',
+    'Noise': 'dB'
+};
 class sensorService {
     async getAll() {
         try {
@@ -23,8 +28,13 @@ class sensorService {
 
 
     async create(data) {
-        const { type, unit, model, location, isActive } = data;
+        const { type, model, location, isActive } = data;
+
+        const unit = SENSOR_CONFIG[type];
+
+        
         const newSensor = new Sensor({ type, unit, model, location, isActive });
+
         return await newSensor.save();
     };
 

@@ -23,7 +23,7 @@ class deviceService {
     };
 
     async create(data) {
-        const { serialNumber, model, ownerId, zoneId, installedAt, status, sensors } = data;
+        const { serialNumber, model, ownerId, zoneId, status, sensors } = data;
 
         const owner = await User.findById(ownerId);
         const zone = await Zone.findById(zoneId);
@@ -50,42 +50,52 @@ class deviceService {
             }
         }
 
-        const newDevice = new Device({ serialNumber, model, ownerId, zoneId, installedAt, status, sensors });
+        const newDevice = new Device({ serialNumber, model, ownerId, zoneId, status, sensors });
         return await newDevice.save();
     };
 
     async update(id, data) {
-        const DeviceUpdated = await Device.findById(id);
-        if (!DeviceUpdated) {
+
+        const deviceToUpdate = await Device.findById(id);
+        if (!deviceToUpdate) {
             throw new Error('Device Not Found');
         }
-        const ownerId = await User.findById(data.ownerId);
-        const zoneId = await Zone.findById(data.zoneId);
-        const sensors = await Sensor.findById(data.sensors);
-        if (!ownerId || !zoneId || !sensors) {
-            throw new Error('User, Zone or Sensor Not Found')
+
+        if (data.ownerId) {
+            const owner = await User.findById(data.ownerId);
+            if (!owner) {
+                throw new Error('Owner (User) Not Found');
+            }
         }
 
-        if (zoneId.isActive === false) {
-            throw new Error('Zone is inactive and cannot be used');
+        if (data.zoneId) {
+            const zone = await Zone.findById(data.zoneId);
+            if (!zone) {
+                throw new Error('Zone Not Found');
+            }
+            if (zone.isActive === false) {
+                throw new Error('Zone is inactive and cannot be used');
+            }
         }
 
-        const sensorIds = data.sensors || [];
-
-
-        if (sensorIds.length > 0) {
+        
+        if (data.sensors && data.sensors.length > 0) {
             const foundSensors = await Sensor.find({
-                _id: { $in: sensorIds }
+                _id: { $in: data.sensors }
             });
 
-            if (foundSensors.length !== sensorIds.length || foundSensors.some(sensor => sensor.isActive === false)) {
+            if (foundSensors.length !== data.sensors.length || foundSensors.some(sensor => sensor.isActive === false)) {
                 throw new Error('One or more Sensor IDs are invalid or not found.');
             }
         }
-        
-        DeviceUpdated.set(data); 
 
-        return await DeviceUpdated.save();
+        Object.keys(data).forEach((key) => {
+            if (data[key] !== null && data[key] !== undefined) {
+                deviceToUpdate[key] = data[key];
+            }
+        });
+
+        return await deviceToUpdate.save();
     };
 
     async delete(id) {

@@ -8,6 +8,7 @@ const ReadingSchema = mongoose.Schema({
 
     time:{
         type: Date,
+        default: Date.now,
     },
     value:{
         type: Number,

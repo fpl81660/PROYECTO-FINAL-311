@@ -13,6 +13,10 @@ const swaggerDefinition = {
             url: 'http://localhost:3000',
             description: 'Servidor de desarrollo'
         },
+        {
+            url: 'https://proyecto-final-311.onrender.com',
+            description: 'Servidor de produccion'
+     }
     ],
 };
 

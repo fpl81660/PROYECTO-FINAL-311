@@ -32,7 +32,7 @@ class sensorService {
 
         const unit = SENSOR_CONFIG[type];
 
-        
+
         const newSensor = new Sensor({ type, unit, model, location, isActive });
 
         return await newSensor.save();
@@ -42,6 +42,12 @@ class sensorService {
         const sensorToUpdate = await Sensor.findById(id);
         if (!sensorToUpdate) {
             throw new Error('Sensor Not Found');
+        }
+        if (data.type) {
+            throw new Error('Type cannot be changed');
+        }
+        if (data.unit) {
+            throw new Error('Unit cannot be changed');
         }
 
         if (data.isActive === false) {

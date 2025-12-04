@@ -178,6 +178,7 @@
  *         id: "674b3cc97e52f0707b615a10"
  *         name: "Juan Pérez"
  *         email: "juan@example.com"
+ *         password: "$2b$10$EixZaY"
  *         role: "admin"
  *
  *     UserInput:

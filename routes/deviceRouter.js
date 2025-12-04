@@ -121,12 +121,13 @@ router.post('/', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *         description: ID del dispositivo
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/DeviceInput'
+ *             $ref: '#/components/schemas/DevicePatchInput'
  *     responses:
  *       200:
  *         description: Dispositivo actualizado
@@ -139,6 +140,8 @@ router.post('/', async (req, res) => {
  *       500:
  *         description: Error del servidor
  */
+
+
 
 
 router.patch('/:id', async (req, res) => {

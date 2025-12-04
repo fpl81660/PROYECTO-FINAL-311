@@ -23,7 +23,7 @@
  *         installedAt:
  *           type: string
  *           format: date-time
- *           description: Fecha de instalación (Automática)
+ *           description: Fecha de instalación
  *         status:
  *           type: string
  *           enum: [active, maintenance, offline]
@@ -67,13 +67,39 @@
  *           type: array
  *           items:
  *             type: string
- *           description: IDs de sensores a vincular (Opcional)
+ *           description: IDs de sensores a vincular
  *       example:
  *         serialNumber: "DVC-B2025"
  *         model: "GW-LITE-V2"
  *         ownerId: "674b3cc97e52f0707b615a10"
  *         zoneId: "674b3cc97e52f0707b615a15"
  *         sensors: []
+ *
+ *     DevicePatchInput:
+ *       type: object
+ *       properties:
+ *         serialNumber:
+ *           type: string
+ *         model:
+ *           type: string
+ *         ownerId:
+ *           type: string
+ *         zoneId:
+ *           type: string
+ *         status:
+ *           type: string
+ *           enum: [active, maintenance, offline]
+ *         sensors:
+ *           type: array
+ *           items:
+ *             type: string
+ *       example:
+ *         serialNumber: "DVC-A9001-UPDATED"
+ *         model: "GW-PRO-V2"
+ *         ownerId: "674b3cc97e52f0707b615a10"
+ *         zoneId: "674b3cc97e52f0707b615a16"
+ *         status: "maintenance"
+ *         sensors: ["674b3cc97e52f0707b615a22"]
  *
  *     Zone:
  *       type: object
@@ -114,6 +140,20 @@
  *         name: "Zona Sur"
  *         description: "Área de descarga"
  *         isActive: true
+ *
+ *     ZonePatchInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         isActive:
+ *           type: boolean
+ *       example:
+ *         name: "Zona Sur Actualizada"
+ *         description: "Nueva descripción de la zona sur"
+ *         isActive: false
  *
  *     User:
  *       type: object
@@ -167,6 +207,24 @@
  *         password: "securePassword123"
  *         role: "viewer"
  *
+ *     UserPatchInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *         role:
+ *           type: string
+ *           enum: [admin, technician, viewer]
+ *       example:
+ *         name: "Juan Pérez Actualizado"
+ *         email: "juan.updated@example.com"
+ *         password: "newSecurePassword123"
+ *         role: "technician"
+ *
  *     Sensor:
  *       type: object
  *       properties:
@@ -178,7 +236,7 @@
  *           description: Tipo de sensor
  *         unit:
  *           type: string
- *           description: Unidad de medida (Calculada automáticamente)
+ *           description: Unidad de medida
  *         model:
  *           type: string
  *           description: Modelo del sensor
@@ -211,7 +269,7 @@
  *           description: Modelo del sensor
  *         location:
  *           type: string
- *           description: Ubicación formato "lat, long"
+ *           description: Formato lat, long
  *         isActive:
  *           type: boolean
  *           description: Estado del sensor
@@ -220,6 +278,20 @@
  *         model: "DHT11"
  *         location: "19.4326, -99.1332"
  *         isActive: true
+ *
+ *     SensorPatchInput:
+ *       type: object
+ *       properties:
+ *         model:
+ *           type: string
+ *         location:
+ *           type: string
+ *         isActive:
+ *           type: boolean
+ *       example:
+ *         model: "DHT22-V2"
+ *         location: "20.5000, -90.5000"
+ *         isActive: false
  *
  *     Reading:
  *       type: object
@@ -233,7 +305,7 @@
  *         time:
  *           type: string
  *           format: date-time
- *           description: Fecha de la lectura (Automática)
+ *           description: Fecha de la lectura
  *         value:
  *           type: number
  *           format: float
@@ -260,4 +332,13 @@
  *       example:
  *         sensorId: "674b3cc97e52f0707b615a20"
  *         value: 45.5
+ *
+ *     ReadingPatchInput:
+ *       type: object
+ *       properties:
+ *         value:
+ *           type: number
+ *           format: float
+ *       example:
+ *         value: 50.1
  */

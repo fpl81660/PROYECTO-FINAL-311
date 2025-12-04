@@ -8,8 +8,7 @@ const deviceService = require('../services/deviceService');
  * /api/Device:
  *   get:
  *     summary: Obtiene todos los dispositivos
- *     tags:
- *       - Device
+ *     tags: [Device]
  *     responses:
  *       200:
  *         description: Lista de dispositivos
@@ -41,8 +40,7 @@ router.get('/', async (req, res) => {
  * /api/Device/{idDevice}:
  *   get:
  *     summary: Obtiene un dispositivo por ID
- *     tags:
- *       - Device
+ *     tags: [Device]
  *     parameters:
  *       - in: path
  *         name: idDevice
@@ -60,6 +58,7 @@ router.get('/', async (req, res) => {
  *       404:
  *         description: Dispositivo no encontrado
  */
+
 
 router.get('/:idDevice', async (req, res) => {
     try {
@@ -80,20 +79,24 @@ router.get('/:idDevice', async (req, res) => {
  * /api/Device:
  *   post:
  *     summary: Crea un nuevo dispositivo
- *     tags:
- *       - Device
+ *     tags: [Device]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Device'
+ *             $ref: '#/components/schemas/DeviceInput'
  *     responses:
  *       201:
  *         description: Dispositivo creado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Device'
  *       500:
  *         description: Error del servidor
  */
+
 
 router.post('/', async (req, res) => {
     try {
@@ -111,8 +114,7 @@ router.post('/', async (req, res) => {
  * /api/Device/{id}:
  *   patch:
  *     summary: Actualiza un dispositivo por ID
- *     tags:
- *       - Device
+ *     tags: [Device]
  *     parameters:
  *       - in: path
  *         name: id
@@ -124,15 +126,20 @@ router.post('/', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Device'
+ *             $ref: '#/components/schemas/DeviceInput'
  *     responses:
  *       200:
  *         description: Dispositivo actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Device'
  *       404:
  *         description: Dispositivo no encontrado
  *       500:
  *         description: Error del servidor
  */
+
 
 router.patch('/:id', async (req, res) => {
     try {
@@ -153,8 +160,7 @@ router.patch('/:id', async (req, res) => {
  * /api/Device/{id}:
  *   delete:
  *     summary: Elimina un dispositivo por ID
- *     tags:
- *       - Device
+ *     tags: [Device]
  *     parameters:
  *       - in: path
  *         name: id
@@ -167,6 +173,7 @@ router.patch('/:id', async (req, res) => {
  *       404:
  *         description: Dispositivo no encontrado
  */
+
     
 router.delete('/:id', async (req, res) => {
     try {

@@ -6,9 +6,8 @@ const readingService = require('../services/readingService');
  * @swagger
  * /api/Reading:
  *   get:
- *     summary: Obtener todas las lecturas
- *     tags:
- *       - Reading
+ *     summary: Obtiene todas las lecturas
+ *     tags: [Reading]
  *     responses:
  *       200:
  *         description: Lista de lecturas
@@ -38,13 +37,13 @@ router.get('/', async (req, res) => {
  * @swagger
  * /api/Reading/{idReading}:
  *   get:
- *     summary: Obtener lectura por ID
- *     tags:
- *       - Reading
+ *     summary: Obtiene una lectura por ID
+ *     tags: [Reading]
  *     parameters:
  *       - in: path
  *         name: idReading
  *         required: true
+ *         description: ID de la lectura
  *         schema:
  *           type: string
  *     responses:
@@ -75,15 +74,14 @@ router.get('/:idReading', async (req, res) => {
  * @swagger
  * /api/Reading:
  *   post:
- *     summary: Crear una nueva lectura
- *     tags:
- *       - Reading
+ *     summary: Crea una nueva lectura
+ *     tags: [Reading]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Reading'
+ *             $ref: '#/components/schemas/ReadingInput'
  *     responses:
  *       201:
  *         description: Lectura creada
@@ -94,6 +92,7 @@ router.get('/:idReading', async (req, res) => {
  *       500:
  *         description: Error al crear lectura
  */
+
 router.post('/', async (req, res) => {
     try {
         const createdReading = await readingService.create(req.body);
@@ -107,13 +106,13 @@ router.post('/', async (req, res) => {
  * @swagger
  * /api/Reading/{id}:
  *   patch:
- *     summary: Actualizar una lectura
- *     tags:
- *       - Reading
+ *     summary: Actualiza una lectura por ID
+ *     tags: [Reading]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID de la lectura
  *         schema:
  *           type: string
  *     requestBody:
@@ -121,15 +120,20 @@ router.post('/', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Reading'
+ *             $ref: '#/components/schemas/ReadingPatchInput'
  *     responses:
  *       200:
  *         description: Lectura actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Reading'
  *       404:
  *         description: Lectura no encontrada
  *       500:
  *         description: Error del servidor
  */
+
 router.patch('/:id', async (req, res) => {
     try {
         const {id} = req.params; 
@@ -148,13 +152,13 @@ router.patch('/:id', async (req, res) => {
  * @swagger
  * /api/Reading/{id}:
  *   delete:
- *     summary: Eliminar una lectura
- *     tags:
- *       - Reading
+ *     summary: Elimina una lectura por ID
+ *     tags: [Reading]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID de la lectura
  *         schema:
  *           type: string
  *     responses:

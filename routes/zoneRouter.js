@@ -4,13 +4,13 @@ const zoneService = require('../services/zoneService');
 
 /**
  * @swagger
- * /api/zone:
+ * /api/Zone:
  *   get:
  *     summary: Obtiene todas las zonas
  *     tags: [Zone]
  *     responses:
  *       200:
- *         description: Lista de zonas obtenida correctamente
+ *         description: Lista de zonas
  *         content:
  *           application/json:
  *             schema:
@@ -18,6 +18,7 @@ const zoneService = require('../services/zoneService');
  *               items:
  *                 $ref: '#/components/schemas/Zone'
  */
+
 router.get('/', async (req, res) => {
     try {
         const zones = await zoneService.getAll();
@@ -33,7 +34,7 @@ router.get('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/zone/{idZone}:
+ * /api/Zone/{idZone}:
  *   get:
  *     summary: Obtiene una zona por ID
  *     tags: [Zone]
@@ -41,6 +42,7 @@ router.get('/', async (req, res) => {
  *       - in: path
  *         name: idZone
  *         required: true
+ *         description: ID de la zona
  *         schema:
  *           type: string
  *     responses:
@@ -70,7 +72,7 @@ router.get('/:idZone', async (req, res) => {
 
 /**
  * @swagger
- * /api/zone:
+ * /api/Zone:
  *   post:
  *     summary: Crea una nueva zona
  *     tags: [Zone]
@@ -79,15 +81,16 @@ router.get('/:idZone', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Zone'
+ *             $ref: '#/components/schemas/ZoneInput'
  *     responses:
  *       201:
- *         description: Zona creada correctamente
+ *         description: Zona creada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Zone'
  */
+
 router.post('/', async (req, res) => {
     try {
         const createdZone = await zoneService.create(req.body);
@@ -99,7 +102,7 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/zone/{id}:
+ * /api/Zone/{id}:
  *   patch:
  *     summary: Actualiza una zona por ID
  *     tags: [Zone]
@@ -107,6 +110,7 @@ router.post('/', async (req, res) => {
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID de la zona
  *         schema:
  *           type: string
  *     requestBody:
@@ -114,10 +118,10 @@ router.post('/', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Zone'
+ *             $ref: '#/components/schemas/ZonePatchInput'
  *     responses:
  *       200:
- *         description: Zona actualizada correctamente
+ *         description: Zona actualizada
  *         content:
  *           application/json:
  *             schema:
@@ -141,7 +145,7 @@ router.patch('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /api/zone/{id}:
+ * /api/Zone/{id}:
  *   delete:
  *     summary: Elimina una zona por ID
  *     tags: [Zone]
@@ -149,11 +153,12 @@ router.patch('/:id', async (req, res) => {
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID de la zona
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Zona eliminada correctamente
+ *         description: Zona eliminada
  *       404:
  *         description: Zona no encontrada
  */

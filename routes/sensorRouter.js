@@ -81,10 +81,14 @@ router.get('/:idSensor', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Sensor'
+ *             $ref: '#/components/schemas/SensorInput'
  *     responses:
  *       201:
- *         description: Sensor creado exitosamente
+ *         description: Sensor creado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sensor'
  *       500:
  *         description: Error al crear el sensor
  */
@@ -116,15 +120,20 @@ router.post('/', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Sensor'
+ *             $ref: '#/components/schemas/SensorPatchInput'
  *     responses:
  *       200:
- *         description: Sensor actualizado exitosamente
+ *         description: Sensor actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sensor'
  *       404:
  *         description: Sensor no encontrado
  *       500:
  *         description: Error al actualizar el sensor
  */
+
 router.patch('/:id', async (req, res) => {
     try {
         const {id} = req.params; 
@@ -154,7 +163,7 @@ router.patch('/:id', async (req, res) => {
  *           type: string
  *     responses:
  *       200:
- *         description: Sensor eliminado correctamente
+ *         description: Sensor eliminado
  *       404:
  *         description: Sensor no encontrado
  */

@@ -81,10 +81,14 @@ router.get('/:idUser', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserInput'
  *     responses:
  *       201:
- *         description: Usuario creado exitosamente
+ *         description: Usuario creado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       500:
  *         description: Error al crear el usuario
  */
@@ -117,10 +121,14 @@ router.post('/', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserPatchInput'
  *     responses:
  *       200:
- *         description: Usuario actualizado exitosamente
+ *         description: Usuario actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: Usuario no encontrado
  *       500:
@@ -156,7 +164,7 @@ router.patch('/:id', async (req, res) => {
  *           type: string
  *     responses:
  *       200:
- *         description: Usuario eliminado correctamente
+ *         description: Usuario eliminado
  *       404:
  *         description: Usuario no encontrado
  */
